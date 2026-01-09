@@ -3,4 +3,11 @@
 ```python
 from bookshelf.models import Book
 
-Book.objects.all()
+book = Book.objects.get(title="1984")
+book
+```
+
+<!--
+Expected Output:
+<Book: 1984>
+-->
