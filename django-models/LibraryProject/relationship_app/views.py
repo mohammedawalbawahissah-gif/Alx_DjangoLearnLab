@@ -1,12 +1,13 @@
 from django.shortcuts import render
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegisterForm  # your custom form
-from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Library
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect
 
 
 # Function-based view to list all books
@@ -27,9 +28,11 @@ def get_context_data(self, **kwargs):
         context['books'] = Book.objects.filter(library=self.object)
         return context
 
+
 # Home page (for logged-in users)
 def home(request):
     return render(request, 'relationship_app/home.html')
+
 
 # Registration
 def register_view(request):
@@ -42,6 +45,7 @@ def register_view(request):
     else:
         form = UserCreationForm()  # ← this satisfies the check
     return render(request, 'relationship_app/register.html', {'form': form})
+
 
 # Login
 def login_view(request):
@@ -60,21 +64,23 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'relationship_app/login.html', {'form': form})
 
+
 # Logout
 def logout_view(request):
     logout(request)
     messages.info(request, "You have been logged out.")
     return render(request, 'relationship_app/logout.html')
 
-# Role check helpers
+
+# Role checkers
 def is_admin(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'admin'
 
 def is_librarian(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'librarian'
 
 def is_member(user):
-    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'member'
 
 
 @login_required
