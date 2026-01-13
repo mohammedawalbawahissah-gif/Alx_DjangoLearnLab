@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 ROLE_CHOICES = (
         ('admin', 'Admin'),
+        ('librarian', 'Librarian'),
         ('member', 'Member'),
     )
 
