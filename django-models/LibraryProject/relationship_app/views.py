@@ -9,7 +9,14 @@ def list_books(request):
 
 
 # Class-based view to display details of a single library
-class LibraryDetailView(DetailView):
-    model = Library
+class LibraryDetailView(View):
     template_name = 'relationship_app/library_detail.html'
-    context_object_name = 'library'
+
+    def get(self, request, pk):
+        library = Library.objects.get(pk=pk)
+        books = Book.objects.filter(library=library)
+        context = {
+            'library': library,
+            'books': books,
+        }
+        return render(request, self.template_name, context)
