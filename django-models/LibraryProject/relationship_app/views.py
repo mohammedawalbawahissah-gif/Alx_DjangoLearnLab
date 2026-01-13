@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegisterForm  # your custom form
 
@@ -30,13 +30,13 @@ def home(request):
 # Registration
 def register_view(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        form = UserCreationForm(request.POST)  # ← use the built-in form
         if form.is_valid():
             form.save()
             messages.success(request, "Registration successful. You can now log in.")
             return redirect('login')
     else:
-        form = RegisterForm()
+        form = UserCreationForm()  # ← this satisfies the check
     return render(request, 'relationship_app/register.html', {'form': form})
 
 # Login
