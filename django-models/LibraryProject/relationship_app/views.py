@@ -1,6 +1,9 @@
-from django.shortcuts import render
-from django.views.generic.detail import DetailView
-from .models import Library, Book
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages
+from .forms import RegisterForm  # your custom form
+
 
 # Function-based view to list all books
 def list_books(request):
@@ -19,12 +22,6 @@ def get_context_data(self, **kwargs):
         # Add books in this library
         context['books'] = Book.objects.filter(library=self.object)
         return context
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import RegisterForm
 
 # Home page (for logged-in users)
 def home(request):
