@@ -5,27 +5,32 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.decorators import user_passes_test
 
-class UserProfile(models.Model):
-    ROLE_CHOICES = (
-        ('Admin', 'Admin'),
-        ('Librarian', 'Librarian'),
-        ('Member', 'Member'),
+
+ROLE_CHOICES = (
+        ('admin', 'Admin'),
+        ('member', 'Member'),
     )
 
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='member')
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
 
 
-# Signal to automatically create/update UserProfile
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        "auth.User",
+        on_delete=models.CASCADE
+    )
+
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        # Default role can be set here if needed
-        UserProfile.objects.create(user=instance, role='Member')
-    instance.userprofile.save()
+        UserProfile.objects.create(user=instance)
+    else:
+        instance.userprofile.save()
 
 
 class Author(models.Model):

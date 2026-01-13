@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegisterForm  # your custom form
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Library
 
 
 # Function-based view to list all books
