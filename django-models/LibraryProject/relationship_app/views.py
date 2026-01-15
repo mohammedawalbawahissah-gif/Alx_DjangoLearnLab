@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.views.generic.detail import DetailView
 from django.views.generic import DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -22,6 +23,11 @@ def list_books(request):
 
 
 # Class-based view to display details of a single library
+
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'relationship_app/book_detail.html'
+
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
