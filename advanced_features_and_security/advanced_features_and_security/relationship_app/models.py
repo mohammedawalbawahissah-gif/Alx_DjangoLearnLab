@@ -52,10 +52,14 @@ class UserProfile(models.Model):
         ("librarian", "Librarian"),
         ("member", "Member"),
     )
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # other fields...
 
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='relationship_profile'  # different reverse name
+    )
+  
     def __str__(self):
         return f"{self.user.username} - {self.role}"
     
