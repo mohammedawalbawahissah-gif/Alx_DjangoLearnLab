@@ -38,7 +38,18 @@ class CustomUser(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='accounts_profile'  # custom reverse name
     )
+    # other fields...
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='relationship_profile'  # different reverse name
+    )
+    # other fields...
