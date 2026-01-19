@@ -59,7 +59,6 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         related_name='relationship_profile'  # different reverse name
     )
-  
     def __str__(self):
         return f"{self.user.username} - {self.role}"
     
