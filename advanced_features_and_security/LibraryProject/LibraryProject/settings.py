@@ -32,6 +32,15 @@ DEBUG = False
 # Hosts allowed to access the project
 ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']  # Replace with your actual domain
 
+# Prevent clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent MIME-type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
 
 # -------------------------------
 # APPLICATION DEFINITION
