@@ -15,3 +15,6 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['title', 'author', 'published_date']  # Include all fields you want to edit
+
+class BookSearchForm(forms.Form):
+    title = forms.CharField(max_length=100, required=False)

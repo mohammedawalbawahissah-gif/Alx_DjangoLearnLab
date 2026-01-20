@@ -1,2 +1,7 @@
 <h1>Admin Dashboard</h1>
 <p>Welcome, {{ user.username }}! You are an admin.</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

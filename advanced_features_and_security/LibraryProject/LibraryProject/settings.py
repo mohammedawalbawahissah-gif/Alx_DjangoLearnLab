@@ -58,7 +58,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Prevents clickjacking
+    'csp.middleware.CSPMiddleware',
 ]
+
+# Example CSP: only allow your own domain and trusted scripts
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://cdnjs.cloudflare.com")
+CSP_STYLE_SRC = ("'self'", "https://fonts.googleapis.com")
+
 
 ROOT_URLCONF = 'LibraryProject.urls'
 

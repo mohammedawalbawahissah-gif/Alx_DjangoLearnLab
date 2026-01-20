@@ -6,3 +6,8 @@
     <p>You are not logged in.</p>
     <a href="{% url 'login' %}">Login</a>
 {% endif %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

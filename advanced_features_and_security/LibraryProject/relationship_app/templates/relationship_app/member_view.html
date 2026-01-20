@@ -1,2 +1,7 @@
 <h1>Member Dashboard</h1>
 <p>Welcome, {{ user.username }}! You are a member.</p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

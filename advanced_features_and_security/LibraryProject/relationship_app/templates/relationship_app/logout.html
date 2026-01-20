@@ -1,2 +1,7 @@
 <h1>You have been logged out</h1>
 <a href="{% url 'login' %}">Login again</a>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

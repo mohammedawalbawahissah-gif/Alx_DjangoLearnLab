@@ -13,3 +13,8 @@
         <li>{{ book.title }} by {{ book.author.name }}</li>
     {% endfor %}
 </ul>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
