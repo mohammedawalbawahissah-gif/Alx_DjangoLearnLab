@@ -2,6 +2,24 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.conf import settings
 
+# ------------------------------
+# Book Model with Permissions
+# ------------------------------
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
+
+    def __str__(self):
+        return self.title
+
 
 # ------------------------------
 # Custom User Manager
@@ -44,15 +62,14 @@ class CustomUser(AbstractUser):
 
 
 # ------------------------------
-# Profile Model with Custom Permissions
+# Profile Model with Permissions
 # ------------------------------
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='accounts_profile'  # custom reverse name
+        related_name='accounts_profile'
     )
-    # Add other profile fields here
     bio = models.TextField(null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
 
@@ -69,7 +86,7 @@ class Profile(models.Model):
 
 
 # ------------------------------
-# Example Additional Model (Optional)
+# Additional User Relation Model
 # ------------------------------
 class UserRelation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
