@@ -1,7 +1,6 @@
-from django.db import modelsfrom django.db import models
+from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.contrib.auth.base_user import BaseUserManager
-
 
 
 class Book(models.Model):
@@ -11,6 +10,7 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
