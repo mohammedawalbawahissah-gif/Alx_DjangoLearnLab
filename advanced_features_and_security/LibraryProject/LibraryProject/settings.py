@@ -49,6 +49,15 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+# Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Optional additional protections
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to session cookie
+CSRF_COOKIE_HTTPONLY = True  # Optional: may interfere with some JS frameworks
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'csp.middleware.CSPMiddleware',  # Content Security Policy middleware
@@ -155,13 +164,16 @@ X_FRAME_OPTIONS = 'DENY'
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-# Redirect HTTP to HTTPS
-SECURE_SSL_REDIRECT = True
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Forces all traffic to use HTTPS
 
 # HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow site to be included in browser preload list
+
+# Other security-related settings
+SECURE_REFERRER_POLICY = "strict-origin"  # Optional: control referrer headers
 
 
 # -------------------------------
