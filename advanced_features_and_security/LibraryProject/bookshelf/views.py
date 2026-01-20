@@ -17,3 +17,13 @@ def book_list(request):
     return render(request, 'bookshelf/book_list.html', {'books': books, 'form': form})
 
 books = books.filter(title__icontains=title)
+
+def example_form_view(request):
+    form = ExampleForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        # For now, just print the cleaned data to console
+        print(form.cleaned_data)
+        # You can also redirect or save data to the database here
+        return render(request, 'bookshelf/form_success.html', {'data': form.cleaned_data})
+
+    return render(request, 'bookshelf/form_example.html', {'form': form})
