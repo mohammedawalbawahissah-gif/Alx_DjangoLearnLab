@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager 
 from django.db import models
 from django.conf import settings
 
@@ -45,4 +45,13 @@ class Profile(models.Model):
     )
     # other fields...
 
+    class Meta:
+        permissions = [
+            ("can_view", "Can view profile"),
+            ("can_create", "Can create profile"),
+            ("can_edit", "Can edit profile"),
+            ("can_delete", "Can delete profile"),
+        ]
+
+# existing stray ForeignKey
 user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
