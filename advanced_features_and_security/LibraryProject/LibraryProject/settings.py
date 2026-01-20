@@ -56,7 +56,10 @@ INSTALLED_APPS = [
     'bookshelf',
     'relationship_app',
     'accounts',
+    'sslserver',
+    'django_extensions',
 ]
+
 
 # Ensure cookies are only sent over HTTPS
 SESSION_COOKIE_SECURE = True
@@ -173,17 +176,25 @@ X_FRAME_OPTIONS = 'DENY'
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-# Redirect all HTTP requests to HTTPS
-SECURE_SSL_REDIRECT = True  # Forces all traffic to use HTTPS
+# Force HTTPS
+SECURE_SSL_REDIRECT = True
 
-# HTTP Strict Transport Security (HSTS)
-SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
-SECURE_HSTS_PRELOAD = True  # Allow site to be included in browser preload list
+# If behind a proxy, detect HTTPS correctly
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Other security-related settings
-SECURE_REFERRER_POLICY = "strict-origin"  # Optional: control referrer headers
+# HSTS
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
+# Cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Secure headers
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
 
 # -------------------------------
 # CONTENT SECURITY POLICY (CSP)
@@ -205,3 +216,35 @@ CSP_FRAME_SRC = ("'none'",)  # Disallow framing
 # 2. Use PostgreSQL or MySQL for production instead of SQLite.
 # 3. Make sure DEBUG=False and ALLOWED_HOSTS is set correctly.
 # 4. Use HTTPS in production for full security benefits.
+
+# Deployment & Security Documentation
+
+## Local HTTPS setup (Windows)
+
+1. Installed OpenSSL from https://slproweb.com/products/Win32OpenSSL.html
+2. Created a self-signed certificate:
+   C:\certs\localhost.crt
+   C:\certs\localhost.key
+3. Installed django-sslserver:
+   pip install django-sslserver
+4. Run server with:
+   python manage.py runsslserver 127.0.0.1:8000 --certificate C:\certs\localhost.crt --key C:\certs\localhost.key
+
+## Django Security Settings
+
+- SECURE_SSL_REDIRECT = True : Forces all traffic over HTTPS
+- SESSION_COOKIE_SECURE = True : Ensures cookies are only sent via HTTPS
+- CSRF_COOKIE_SECURE = True : Protects CSRF tokens
+- SECURE_HSTS_SECONDS = 31536000 : Instructs browsers to use HTTPS only
+- SECURE_HSTS_INCLUDE_SUBDOMAINS = True : Includes subdomains
+- SECURE_HSTS_PRELOAD = True : Allows browser preload list
+- X_FRAME_OPTIONS = 'DENY' : Prevents clickjacking
+- SECURE_CONTENT_TYPE_NOSNIFF = True : Prevents MIME sniffing
+- SECURE_BROWSER_XSS_FILTER = True : Enables XSS protection in browser
+
+## Review
+
+- All HTTP traffic is redirected to HTTPS.
+- Sensitive cookies are secured.
+- Security headers mitigate clickjacking, XSS, and MIME attacks.
+- Potential improvement: Add Content Security Policy (CSP) for advanced XSS protection.
