@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+</head>
+<body>
+    <h1>Library Book List</h1>
+
+    {% if books %}
+        <ul>
+            {% for book in books %}
+                <li>
+                    <strong>Title:</strong> {{ book.title }} <br>
+                    <strong>Author:</strong> {{ book.author }} <br>
+                    <strong>Published:</strong> {{ book.published_date }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No books available.</p>
+    {% endif %}
+
+    <a href="{% url 'example_form' %}">Add a New Book</a>
+</body>
+</html>
