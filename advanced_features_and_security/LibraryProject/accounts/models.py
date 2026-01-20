@@ -1,8 +1,11 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager 
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.conf import settings
 
 
+# ------------------------------
+# Custom User Manager
+# ------------------------------
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
         if not username:
@@ -27,6 +30,9 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, email, password, **extra_fields)
 
 
+# ------------------------------
+# Custom User Model
+# ------------------------------
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to="profile_photos/", null=True, blank=True)
@@ -37,13 +43,18 @@ class CustomUser(AbstractUser):
         return self.username
 
 
+# ------------------------------
+# Profile Model with Custom Permissions
+# ------------------------------
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='accounts_profile'  # custom reverse name
     )
-    # other fields...
+    # Add other profile fields here
+    bio = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         permissions = [
@@ -53,5 +64,16 @@ class Profile(models.Model):
             ("can_delete", "Can delete profile"),
         ]
 
-# existing stray ForeignKey
-user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"Profile of {self.user.username}"
+
+
+# ------------------------------
+# Example Additional Model (Optional)
+# ------------------------------
+class UserRelation(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    relation_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.relation_name}"
