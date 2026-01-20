@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'django_extensions',
 ]
 
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
 
 # Ensure cookies are only sent over HTTPS
 SESSION_COOKIE_SECURE = True
@@ -221,30 +223,26 @@ CSP_FRAME_SRC = ("'none'",)  # Disallow framing
 
 ## Local HTTPS setup (Windows)
 
-1. Installed OpenSSL from https://slproweb.com/products/Win32OpenSSL.html
-2. Created a self-signed certificate:
-   C:\certs\localhost.crt
-   C:\certs\localhost.key
-3. Installed django-sslserver:
-   pip install django-sslserver
-4. Run server with:
-   python manage.py runsslserver 127.0.0.1:8000 --certificate C:\certs\localhost.crt --key C:\certs\localhost.key
+#1. Installed OpenSSL from https://slproweb.com/products/Win32OpenSSL.html
+#2. Created a self-signed certificate: C:\certs\localhost.crt C:\certs\localhost.key
+#3. Installed django-sslserver: pip install django-sslserver
+#4. Run server with: python manage.py runsslserver 127.0.0.1:8000 --certificate C:\certs\localhost.crt --key C:\certs\localhost.key
 
 ## Django Security Settings
 
-- SECURE_SSL_REDIRECT = True : Forces all traffic over HTTPS
-- SESSION_COOKIE_SECURE = True : Ensures cookies are only sent via HTTPS
-- CSRF_COOKIE_SECURE = True : Protects CSRF tokens
-- SECURE_HSTS_SECONDS = 31536000 : Instructs browsers to use HTTPS only
-- SECURE_HSTS_INCLUDE_SUBDOMAINS = True : Includes subdomains
-- SECURE_HSTS_PRELOAD = True : Allows browser preload list
-- X_FRAME_OPTIONS = 'DENY' : Prevents clickjacking
-- SECURE_CONTENT_TYPE_NOSNIFF = True : Prevents MIME sniffing
-- SECURE_BROWSER_XSS_FILTER = True : Enables XSS protection in browser
+SECURE_SSL_REDIRECT = True #Forces all traffic over HTTPS
+SESSION_COOKIE_SECURE = True #Ensures cookies are only sent via HTTPS
+CSRF_COOKIE_SECURE = True #Protects CSRF tokens
+SECURE_HSTS_SECONDS = 31536000 #Instructs browsers to use HTTPS only
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True #Includes subdomains
+SECURE_HSTS_PRELOAD = True #Allows browser preload list
+X_FRAME_OPTIONS = 'DENY' #Prevents clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True #Prevents MIME sniffing
+SECURE_BROWSER_XSS_FILTER = True #Enables XSS protection in browser
 
 ## Review
 
-- All HTTP traffic is redirected to HTTPS.
-- Sensitive cookies are secured.
-- Security headers mitigate clickjacking, XSS, and MIME attacks.
-- Potential improvement: Add Content Security Policy (CSP) for advanced XSS protection.
+#- All HTTP traffic is redirected to HTTPS.
+#- Sensitive cookies are secured.
+#- Security headers mitigate clickjacking, XSS, and MIME attacks.
+#- Potential improvement: Add Content Security Policy (CSP) for advanced XSS protection.
