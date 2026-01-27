@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),  # Connect your api app
+    path('api/', include('books_app.urls')),  # make sure your app URLs are included
 ]
