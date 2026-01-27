@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import BookViewSet, BookList
+from books_app.views import BookListView
 
 router = DefaultRouter()
 router.register(r'books', BookViewSet)
@@ -18,6 +19,14 @@ urlpatterns = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('books_app.urls')),  # make sure your app URLs are included
+]
+
+urlpatterns = [
+    path('books_all/', BookListView.as_view(), name='book-list'),
+]
+
+urlpatterns = [
+    path('books/', include('books_app.urls')),  # this connects the books_app URLs
 ]
 
 urlpatterns = [
