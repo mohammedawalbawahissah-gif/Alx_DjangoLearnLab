@@ -1,4 +1,7 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import BookViewSet
+
 from .views import (
     BookListView,
     BookDetailView,
@@ -6,6 +9,9 @@ from .views import (
     BookUpdateView,
     BookDeleteView,
 )
+
+router = DefaultRouter()
+router.register(r'books', BookViewSet, basename='book') 
 
 urlpatterns = [
     # Read
@@ -16,4 +22,5 @@ urlpatterns = [
     path('books/create/', BookCreateView.as_view(), name='book-create'),
     path('books/update/<int:pk>/', BookUpdateView.as_view(), name='book-update'),
     path('books/delete/<int:pk>/', BookDeleteView.as_view(), name='book-delete'),
+    path('', include(router.urls)),
 ]
