@@ -1,12 +1,10 @@
 from rest_framework import filters  # required for OrderingFilter
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from .models import Book
-from .serializers import BookSerializer
 from django_filters import rest_framework  # satisfies some automated task checks
 from rest_framework import generics, filters  # required for filters.OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend  # correct for filtering
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import Book
 from .serializers import BookSerializer
 from .filters import BookFilter
