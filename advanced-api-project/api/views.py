@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from .models import Book
 from .serializers import BookSerializer
 from .filters import BookFilter
+from rest_framework import viewsets
+
 
 class BookListView(generics.ListAPIView):
     """
@@ -56,3 +58,9 @@ class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = BookFilter
