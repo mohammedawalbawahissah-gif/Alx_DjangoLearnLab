@@ -1,5 +1,12 @@
 {% extends "base.html" %}
+
 {% block content %}
-<h2>You have been logged out</h2>
-<a href="{% url 'login' %}">Login again</a>
+<h2>Register</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+</form>
+
 {% endblock %}
