@@ -19,6 +19,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.shortcuts import render
 from .models import Post
 from django.db.models import Q
+from taggit.models import Tag
 
 
 
@@ -187,3 +188,14 @@ def search_posts(request):
         posts = Post.objects.none()  # Return empty if no query
 
     return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/posts_by_tag.html'  # Create this template
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        if tag_slug:
+            return Post.objects.filter(tags__name__iexact=tag_slug)
+        return Post.objects.none()
