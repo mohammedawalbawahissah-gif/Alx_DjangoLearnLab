@@ -12,11 +12,14 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Post
 from .forms import PostForm
 from .models import Post, Comment
 from .forms import CommentForm
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.shortcuts import render
+from .models import Post
+from django.db.models import Q
+
 
 
 def register(request):
@@ -171,5 +174,16 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'post_id': self.object.post.id})
+    
+def search_posts(request):
+    query = request.GET.get('q', '')  # Get search term from URL ?q=
+    if query:
+        posts = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    else:
+        posts = Post.objects.none()  # Return empty if no query
 
-
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
