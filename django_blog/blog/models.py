@@ -47,5 +47,9 @@ class Comment(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
+
     def __str__(self):
         return f"Comment by {self.author.username} on {self.post.title}"
