@@ -4,6 +4,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, UserSerializer, TokenSerializer
 
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Welcome to Accounts App")
+
+
 # User Registration
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
