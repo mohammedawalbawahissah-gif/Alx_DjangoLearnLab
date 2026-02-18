@@ -1,0 +1,6 @@
+{
+    "editor.inlineSuggest.triggerCommandOnProviderChange": true,
+    "editor.quickSuggestions": {
+        "strings": "on"
+    }
+}
