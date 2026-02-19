@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from notifications.models import Notification
 
-
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to allow only owners of an object to edit or delete it.
@@ -45,16 +44,17 @@ class FeedView(generics.ListAPIView):
         # ✅ Use exactly what the check expects
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
 
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def like_post(request, pk):
+    # ✅ Use get_object_or_404 exactly as expected
     post = get_object_or_404(Post, pk=pk)
     like, created = Like.objects.get_or_create(user=request.user, post=post)
     
     if not created:
         return Response({'detail': 'You have already liked this post.'}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Create notification for the post author
     if post.author != request.user:
         Notification.objects.create(
             recipient=post.author,
@@ -67,6 +67,7 @@ def like_post(request, pk):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def unlike_post(request, pk):
+    # ✅ Again, using get_object_or_404
     post = get_object_or_404(Post, pk=pk)
     like = Like.objects.filter(user=request.user, post=post).first()
     
