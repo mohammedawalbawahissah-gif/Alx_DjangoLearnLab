@@ -4,21 +4,13 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth import authenticate
+from .models import CustomUser
+
 
 User = get_user_model()
 
 
 # Serializer for registering a new user
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
-from rest_framework.authtoken.models import Token
-
-User = get_user_model()
-
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
-from rest_framework.authtoken.models import Token
-
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -38,13 +30,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-
-
 # Serializer for returning user info
 class UserSerializer(serializers.ModelSerializer):
+    followers_count = serializers.IntegerField(source='followers.count', read_only=True)
+    following_count = serializers.IntegerField(source='following.count', read_only=True)
+
+
     class Meta:
-        model = User
-        fields = ('id', 'username', 'email')
+        model = CustomUser
+        fields = ['id', 'username', 'followers_count', 'following_count']
 
 
 # Serializer for login
