@@ -150,3 +150,25 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_SSL_REDIRECT = True  # Only if you have SSL set up
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+
+import os
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# Where collectstatic will collect all static files for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Optional: additional locations for static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Media files (user uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = '<your-access-key>'
+AWS_SECRET_ACCESS_KEY = '<your-secret-key>'
+AWS_STORAGE_BUCKET_NAME = '<your-bucket-name>'
