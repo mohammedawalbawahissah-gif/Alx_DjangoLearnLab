@@ -1,22 +1,62 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth import authenticate
 User = get_user_model()
 
-class UserRegisterSerializer(serializers.ModelSerializer):
-    # This is the required CharField
-    password = [serializers.CharField()]
+# Serializer for registering a new user
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    email = serializers.EmailField(
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
 
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
 
     def create(self, validated_data):
-        user = get_user_model().objects.create_user(
+        user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email'),
+            email=validated_data['email'],
             password=validated_data['password']
         )
-        Token.objects.create(user=user)
+        Token.objects.create(user=user)  # create auth token automatically
         return user
+
+
+# Serializer for returning user info
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
+
+
+# Serializer for login
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    token = serializers.CharField(read_only=True)
+    user = UserSerializer(read_only=True)
+
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise serializers.ValidationError("Invalid credentials")
+        else:
+            raise serializers.ValidationError("Username and password are required")
+
+        token, created = Token.objects.get_or_create(user=user)
+        update_last_login(None, user)
+
+        return {
+            'user': UserSerializer(user).data,
+            'token': token.key
+        }
