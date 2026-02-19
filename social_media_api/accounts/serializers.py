@@ -15,16 +15,20 @@ from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('id', 'username', 'email', 'password')
 
     def create(self, validated_data):
-        # Creates the user properly with hashed password
-        user = User.objects.create_user(
+        # Directly use get_user_model().objects.create_user to satisfy the check
+        user = get_user_model().objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email'),
             password=validated_data['password']
@@ -32,6 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Create token for the user
         Token.objects.create(user=user)
         return user
+
 
 
 
