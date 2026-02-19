@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db_name',
+        'USER': 'db_user',
+        'PASSWORD': 'db_password',
+        'HOST': 'db_host',
+        'PORT': 'db_port',
     }
 }
 
@@ -135,3 +139,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'IP_address_if_needed']
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True  # Only if you have SSL set up
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
